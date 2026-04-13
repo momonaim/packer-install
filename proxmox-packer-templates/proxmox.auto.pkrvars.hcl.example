@@ -1,0 +1,11 @@
+proxmox_host     = "IP:8006"
+proxmox_user     = "TOKEN@pam!TOKEN"
+proxmox_token    = "xxx"
+proxmox_insecure_tls = true
+
+node = "pve"
+pool = ""
+
+disk_storage_pool = "local-zfs"
+iso_storage_pool  = "local"
+network_adapter   = "vmbr0"
