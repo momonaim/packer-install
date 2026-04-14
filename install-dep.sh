@@ -12,8 +12,12 @@ apt install -y curl wget gnupg jq unzip openssh-client python3-pip
 # ---------------------- JENKINS ----------------------
 echo -e "${GREEN}=== Installation de Jenkins ===${NC}"
 rm -f /etc/apt/sources.list.d/jenkins.list /usr/share/keyrings/jenkins-keyring.* 2>/dev/null || true
-curl -fsSL https://pkg.jenkins.io/debian-stable/jenkins.io-2023.key | gpg --dearmor -o /etc/apt/trusted.gpg.d/jenkins.gpg
-echo "deb https://pkg.jenkins.io/debian-stable binary/" > /etc/apt/sources.list.d/jenkins.list
+
+# Importer la clé GPG correctement
+curl -fsSL https://pkg.jenkins.io/debian-stable/jenkins.io-2023.key | gpg --dearmor -o /usr/share/keyrings/jenkins-keyring.gpg
+
+# Ajouter le repository avec la clé correctement référencée
+echo "deb [arch=amd64 signed-by=/usr/share/keyrings/jenkins-keyring.gpg] https://pkg.jenkins.io/debian-stable binary/" | tee /etc/apt/sources.list.d/jenkins.list > /dev/null
 
 apt update
 apt install -y fontconfig openjdk-17-jre jenkins
