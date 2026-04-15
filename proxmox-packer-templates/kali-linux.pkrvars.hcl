@@ -25,10 +25,8 @@ boot_command = [
   "<enter>"
 ]
 provisioner = [
-  "useradd -m -s /bin/bash kali",
-  "echo 'kali:kali' | chpasswd",
-  "usermod -aG sudo kali",
-  "apt update && apt install -y sudo qemu-guest-agent",
+  "apt update && apt install -y sudo qemu-guest-agent kali-desktop-xfce",
   "systemctl enable qemu-guest-agent",
+  "systemctl enable lightdm",
   "userdel --remove --force packer"
 ]
