@@ -68,6 +68,7 @@ Other interesting variables are:
   - windows_edition
   - windows_language / windows_input_language
   - winrm_username / winrm_password (Win11 alway creates a user, Win Server will use Administrator)
+  - windows_provisioner (PowerShell commands executed via WinRM, useful for a final Sysprep)
 
 See [variables.pkr.hcl](./variables.pkr.hcl) for all varaibles.
 
@@ -84,6 +85,8 @@ packer build -var-file="debian-13.pkrvars.hcl" .
 ### Windows
 
 You can run additional setup actions for windows by creating a file `http/windows-scripts/custom/custom.ps1`.
+
+For templates that should be consumed by Terraform clones (especially linked clones), run a final Sysprep generalize step via `windows_provisioner` so the template is sealed before conversion.
 
 Example:
 

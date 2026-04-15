@@ -27,9 +27,16 @@ additional_cd_files = [
     files  = ["./http/windows-scripts/*"]
   }
 ]
-os             = "win11"
+# Keep Win11 installation media and unattended settings, but use Proxmox win10 guest type
+# for broader compatibility with some clone workflows/providers.
+os             = "win10"
 communicator   = "winrm"
 http_directory = ""
 cloud_init   = false
 boot_command   = []
 provisioner    = []
+windows_provisioner = [
+  "$sysprep = \"$env:SystemRoot\\System32\\Sysprep\\Sysprep.exe\"",
+  "if (!(Test-Path $sysprep)) { throw 'Sysprep.exe not found' }",
+  "& $sysprep /oobe /generalize /mode:vm /shutdown /quiet"
+]

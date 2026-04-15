@@ -152,6 +152,30 @@ variable "bios" {
   default     = "seabios"
 }
 
+variable "enable_efi" {
+  description = "Whether to add an EFI disk configuration (required for OVMF based templates)."
+  type        = bool
+  default     = false
+}
+
+variable "efi_storage_pool" {
+  description = "Storage pool for EFI disk. If empty, disk_storage_pool is used."
+  type        = string
+  default     = ""
+}
+
+variable "efi_type" {
+  description = "Type of EFI vars storage (e.g. 2m, 4m)."
+  type        = string
+  default     = "4m"
+}
+
+variable "efi_pre_enrolled_keys" {
+  description = "Whether to use pre-enrolled secure boot keys for EFI."
+  type        = bool
+  default     = true
+}
+
 
 
 
@@ -357,6 +381,24 @@ variable "windows_input_language" {
 variable "provisioner" {
   description = "The packer provisioner commands."
   type        = list(string)
+}
+
+variable "windows_provisioner" {
+  description = "Windows PowerShell provisioner commands (e.g. sysprep) executed via WinRM."
+  type        = list(string)
+  default     = []
+}
+
+variable "windows_provisioner_scripts" {
+  description = "Windows PowerShell provisioner scripts executed via WinRM."
+  type        = list(string)
+  default     = []
+}
+
+variable "windows_shell_scripts" {
+  description = "Windows shell provisioner scripts (e.g. .bat/.cmd) executed via WinRM."
+  type        = list(string)
+  default     = []
 }
 
 variable "packer_http_interface" {

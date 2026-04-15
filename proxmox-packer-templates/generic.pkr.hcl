@@ -15,6 +15,7 @@ locals {
     label   = "Windows Unattended CD"
   }] : []
   additional_cd_files = concat(var.additional_cd_files, local.unattended_as_cd)
+  effective_efi_storage_pool = var.efi_storage_pool == "" ? var.disk_storage_pool : var.efi_storage_pool
 }
 
 source "proxmox-iso" "vm" {
@@ -67,6 +68,15 @@ source "proxmox-iso" "vm" {
   onboot          = var.start_at_boot
   qemu_agent      = var.qemu_agent
   bios            = var.bios
+
+  dynamic "efi_config" {
+    for_each = var.enable_efi ? [1] : []
+    content {
+      efi_storage_pool  = local.effective_efi_storage_pool
+      pre_enrolled_keys = var.efi_pre_enrolled_keys
+      efi_type          = var.efi_type
+    }
+  }
 
   boot_iso {
     # type             = var.iso_type
@@ -136,6 +146,32 @@ build {
       execute_command = "echo 'packer' | {{ .Vars }} sudo -S -E sh -eux '{{ .Path }}'"
       inline          = var.provisioner
       skip_clean      = true
+    }
+  }
+
+  dynamic "provisioner" {
+    for_each = length(var.windows_shell_scripts) > 0 ? [1] : []
+    labels   = ["windows-shell"]
+    content {
+      scripts = var.windows_shell_scripts
+    }
+  }
+
+  dynamic "provisioner" {
+    for_each = length(var.windows_provisioner_scripts) > 0 ? [1] : []
+    labels   = ["powershell"]
+    content {
+      scripts = var.windows_provisioner_scripts
+    }
+  }
+
+  dynamic "provisioner" {
+    for_each = length(var.windows_provisioner) > 0 ? [1] : []
+    labels   = ["powershell"]
+    content {
+      # Some finalization commands (e.g. Sysprep /shutdown) intentionally drop WinRM.
+      expect_disconnect = true
+      inline            = var.windows_provisioner
     }
   }
 }
