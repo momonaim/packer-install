@@ -51,6 +51,7 @@ os             = "win11"
 communicator   = "winrm"
 winrm_use_ssl  = true
 winrm_insecure = true
+winrm_timeout  = "4h"
 http_directory = ""
 cloud_init     = false
 boot_wait      = "0s"

@@ -360,6 +360,12 @@ variable "winrm_use_ssl" {
   default     = false
 }
 
+variable "winrm_timeout" {
+  description = "The timeout waiting for WinRM connection."
+  type        = string
+  default     = "30m"
+}
+
 variable "windows_edition" {
   description = "Windows edition of the ISO file to install (this is usefull to overwrite for Windows 11 Pro or Server Core/Datacenter)."
   type        = string
