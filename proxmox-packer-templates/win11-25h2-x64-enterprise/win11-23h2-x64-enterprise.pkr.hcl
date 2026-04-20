@@ -143,7 +143,7 @@ source "proxmox-iso" "win11-25h2-x64-enterprise" {
     disk_size         = "${var.vm_disk_size}"
     format            = "${var.disk_storage_format}"
     storage_pool      = "${var.disk_storage_pool}"
-    type              = "virtio"
+    type              = "scsi"
     discard           = true
     io_thread         = true
   }
