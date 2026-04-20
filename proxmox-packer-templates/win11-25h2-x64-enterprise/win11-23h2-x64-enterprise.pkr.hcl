@@ -189,4 +189,12 @@ build {
     scripts = ["scripts/install-virtio-drivers.ps1"]
   }
 
+  provisioner "powershell" {
+    inline = [
+      "$sysprep = \"$env:SystemRoot\\System32\\Sysprep\\Sysprep.exe\"",
+      "if (!(Test-Path $sysprep)) { throw 'Sysprep.exe not found' }",
+      "& $sysprep /oobe /generalize /mode:vm /shutdown /quiet"
+    ]
+  }
+
 }
