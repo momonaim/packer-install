@@ -6,7 +6,7 @@ variable "iso_checksum" {
 # https://github.com/proxmox/qemu-server/blob/9b1971c5c991540f27270022e586aec5082b0848/PVE/QemuServer.pm#L412
 variable "os" {
   type    = string
-  default = "win11"
+  default = "win10"
 }
 
 variable "iso_url" {
