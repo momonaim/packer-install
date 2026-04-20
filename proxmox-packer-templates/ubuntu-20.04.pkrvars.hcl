@@ -10,8 +10,9 @@ boot_command = [
   "autoinstall ds=nocloud-net;s=http://{{ .HTTPIP }}:{{ .HTTPPort }}/",
   "<enter>"
 ]
+ssh_username = "ubuntu"
+ssh_password = "ubuntu"
 provisioner = [
   "cloud-init clean",
-  "rm /etc/cloud/cloud.cfg.d/*",
-  "userdel --remove --force packer"
+  "rm /etc/cloud/cloud.cfg.d/*"
 ]

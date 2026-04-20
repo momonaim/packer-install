@@ -14,8 +14,9 @@ boot_command = [
   "boot",
   "<enter>"
 ]
+ssh_username = "ubuntu"
+ssh_password = "ubuntu"
 provisioner = [
   "cloud-init clean",
-  "rm /etc/cloud/cloud.cfg.d/*",
-  "userdel --remove --force packer"
+  "rm /etc/cloud/cloud.cfg.d/*"
 ]

@@ -3,8 +3,29 @@ autoinstall:
   version: 1
   identity:
     hostname: ubuntu
-    username: packer
+    username: ubuntu
     password: '$6$FhcddHFVZ7ABA4Gi$QybBjJXeTESb.NIDf7umP5rubBXM0N.SseGarXYz1kZpit8UgV6CVWo7ubIoacgdBEPUXTWXe92GyAVJ.jOJZ.'
+  user-data:
+    disable_root: true
+    ssh_pwauth: true
+    chpasswd:
+      expire: false
+      list:
+        - ubuntu:ubuntu
+    users:
+      - default
+      - name: ubuntu
+        gecos: Ubuntu
+        groups:
+          - adm
+          - cdrom
+          - dip
+          - lpadmin
+          - plugdev
+          - sudo
+        shell: /bin/bash
+        lock_passwd: false
+        plain_text_passwd: ubuntu
   network:
     network:
       version: 2
@@ -20,5 +41,6 @@ autoinstall:
     install-server: true
     allow-pw: true
   late-commands:
+    - curtin in-target --target=/target -- bash -c "echo 'ubuntu:ubuntu' | chpasswd"
     - curtin in-target --target=/target -- apt update           
     - curtin in-target --target=/target -- apt upgrade -y
