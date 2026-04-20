@@ -45,38 +45,43 @@ variable "winrm_username" {
 }
 
 # This block has to be in each file or packer won't be able to use the variables
-variable "proxmox_url" {
-  type = string
-}
 variable "proxmox_host" {
   type = string
 }
-variable "proxmox_username" {
+variable "proxmox_user" {
   type = string
 }
 variable "proxmox_password" {
   type      = string
   sensitive = true
+  default   = ""
 }
-variable "proxmox_storage_pool" {
+variable "proxmox_token" {
+  type      = string
+  sensitive = true
+  default   = ""
+}
+variable "disk_storage_pool" {
   type = string
 }
-variable "proxmox_storage_format" {
+variable "disk_storage_format" {
   type = string
+  default = "raw"
 }
-variable "proxmox_skip_tls_verify" {
+variable "proxmox_insecure_tls" {
   type = bool
 }
-variable "proxmox_pool" {
+variable "node" {
   type = string
+}
+variable "pool" {
+  type = string
+  default = ""
 }
 variable "iso_storage_pool" {
   type = string
 }
-variable "ansible_home" {
-  type = string
-}
-variable "ludus_nat_interface" {
+variable "network_adapter" {
   type = string
 }
 ####
@@ -124,7 +129,7 @@ source "proxmox-iso" "win11-25h2-x64-enterprise" {
   # Required for Win11
   bios = "ovmf"
   efi_config {
-    efi_storage_pool  = "${var.proxmox_storage_pool}"
+    efi_storage_pool  = "${var.disk_storage_pool}"
     pre_enrolled_keys = true
     efi_type          = "4m"
   }
@@ -136,28 +141,29 @@ source "proxmox-iso" "win11-25h2-x64-enterprise" {
   scsi_controller = "virtio-scsi-single"
   disks {
     disk_size         = "${var.vm_disk_size}"
-    format            = "${var.proxmox_storage_format}"
-    storage_pool      = "${var.proxmox_storage_pool}"
+    format            = "${var.disk_storage_format}"
+    storage_pool      = "${var.disk_storage_pool}"
     type              = "virtio"
     discard           = true
     io_thread         = true
   }
-  pool                     = "${var.proxmox_pool}"
-  insecure_skip_tls_verify = "${var.proxmox_skip_tls_verify}"
+  pool                     = "${var.pool}"
+  insecure_skip_tls_verify = "${var.proxmox_insecure_tls}"
   iso_checksum             = "${var.iso_checksum}"
   iso_url                  = "${var.iso_url}"
   iso_storage_pool         = "${var.iso_storage_pool}"
   memory                   = "${var.vm_memory}"
   network_adapters {
-    bridge = "${var.ludus_nat_interface}"
+    bridge = "${var.network_adapter}"
     model  = "virtio"
   }
-  node                 = "${var.proxmox_host}"
+  node                 = "${var.node}"
   os                   = "${var.os}"
   password             = "${var.proxmox_password}"
-  proxmox_url          = "${var.proxmox_url}"
+  proxmox_url          = "https://${var.proxmox_host}/api2/json"
+  token                = "${var.proxmox_token}"
   template_description = "${local.template_description}"
-  username             = "${var.proxmox_username}"
+  username             = "${var.proxmox_user}"
   vm_name              = "${var.vm_name}"
   winrm_insecure       = true
   winrm_password       = "${var.winrm_password}"
