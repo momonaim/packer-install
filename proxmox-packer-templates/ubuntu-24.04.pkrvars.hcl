@@ -1,5 +1,9 @@
 # renovate: datasource=custom.ubuntuLinuxRelease
 name           = "ubuntu-24.04-template"
+cpu_sockets    = 1
+cpu_cores      = 4
+memory         = 8192
+disk_size      = "64G"
 iso_file       = "ubuntu-24.04.4-desktop-amd64.iso"
 iso_url        = "https://releases.ubuntu.com/24.04.4/ubuntu-24.04.4-desktop-amd64.iso"
 iso_checksum   = "file:https://releases.ubuntu.com/24.04.4/SHA256SUMS"
