@@ -1,21 +1,32 @@
 #cloud-config
 autoinstall:
-version: 1
-identity:
-hostname: ubuntu24-ansible
-username: ubuntu
-password: '$6$FhcddHFVZ7ABA4Gi$QybBjJXeTESb.NIDf7umP5rubBXM0N.SseGarXYz1kZpit8UgV6CVWo7ubIoacgdBEPUXTWXe92GyAVJ.jOJZ.'
-network:
-network:
-version: 2
-ethernets:
-ens18:
-dhcp4: true
-storage:
-layout:
-name: direct
-packages: - ubuntu-desktop - qemu-guest-agent - openssh-server - python3 - python3-apt - sudo
-ssh:
-install-server: true
-allow-pw: true
-late-commands: - curtin in-target --target=/target -- systemctl enable qemu-guest-agent - curtin in-target --target=/target -- systemctl enable ssh - curtin in-target --target=/target -- bash -c "echo 'ubuntu ALL=(ALL) NOPASSWD:ALL' > /etc/sudoers.d/90-ubuntu-nopasswd && chmod 440 /etc/sudoers.d/90-ubuntu-nopasswd" - curtin in-target --target=/target -- sed -i 's/^#\?PasswordAuthentication.\*/PasswordAuthentication yes/' /etc/ssh/sshd_config - curtin in-target --target=/target -- bash -c "echo 'ubuntu:ubuntu' | chpasswd"
+  version: 1
+  identity:
+    hostname: ubuntu24-ansible
+    username: ubuntu
+    password: '$6$FhcddHFVZ7ABA4Gi$QybBjJXeTESb.NIDf7umP5rubBXM0N.SseGarXYz1kZpit8UgV6CVWo7ubIoacgdBEPUXTWXe92GyAVJ.jOJZ.'
+  network:
+    network:
+      version: 2
+      ethernets:
+        ens18:
+          dhcp4: true
+  storage:
+    layout:
+      name: direct
+  packages:
+    - ubuntu-desktop
+    - qemu-guest-agent
+    - openssh-server
+    - python3
+    - python3-apt
+    - sudo
+  ssh:
+    install-server: true
+    allow-pw: true
+  late-commands:
+    - curtin in-target --target=/target -- systemctl enable qemu-guest-agent
+    - curtin in-target --target=/target -- systemctl enable ssh
+    - curtin in-target --target=/target -- bash -c "echo 'ubuntu ALL=(ALL) NOPASSWD:ALL' > /etc/sudoers.d/90-ubuntu-nopasswd && chmod 440 /etc/sudoers.d/90-ubuntu-nopasswd"
+    - curtin in-target --target=/target -- sed -i 's/^#\?PasswordAuthentication.\*/PasswordAuthentication yes/' /etc/ssh/sshd_config
+    - curtin in-target --target=/target -- bash -c "echo 'ubuntu:ubuntu' | chpasswd"
