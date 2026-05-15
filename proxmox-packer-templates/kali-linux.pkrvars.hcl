@@ -4,6 +4,7 @@ iso_file       = "kali-linux-2026.1-installer-netinst-amd64.iso"
 iso_url        = "https://cdimage.kali.org/current/kali-linux-2026.1-installer-netinst-amd64.iso"
 iso_checksum   = "file:https://cdimage.kali.org/current/SHA256SUMS"
 http_directory = "./http/kali"
+cloud_init    = true
 boot_command = [
   "<esc><wait>",
   "install ",
